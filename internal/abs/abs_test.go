@@ -1,7 +1,11 @@
 package abs
 
-import "testing"
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
+// TestAbs более громоздкая реализация стандартной библиотекой.
 func TestAbs(t *testing.T) {
 
 	tests := []struct {
@@ -23,4 +27,21 @@ func TestAbs(t *testing.T) {
 		})
 	}
 
+}
+
+// TestAbs2 реализация теста с использованием сторонней библиотеки.
+func TestAbs2(t *testing.T) {
+	tests := []struct {
+		name  string
+		value float64
+		want  float64
+	}{
+		{name: "negative value", value: -3.001, want: 3.002},
+		{name: "small value", value: -0.0000001, want: 0.0000001},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			assert.Equal(t, test.want, Abs(test.value))
+		})
+	}
 }
