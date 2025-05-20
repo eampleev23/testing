@@ -33,7 +33,7 @@ func (f *Family) AddNew(r Relationship, p Person) error {
 	if f.Members == nil {
 		f.Members = map[Relationship]Person{}
 	}
-	if _, ok := f.Members[r]; !ok {
+	if _, ok := f.Members[r]; ok {
 		return ErrRelationshipAlreadyExists
 	}
 	f.Members[r] = p
