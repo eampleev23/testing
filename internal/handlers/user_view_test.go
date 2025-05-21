@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"io"
@@ -74,14 +73,7 @@ func TestUserViewHandler(t *testing.T) {
 			assert.Equal(t, tt.want.contentType, result.Header.Get("Content-Type"))
 
 			userResult, err := io.ReadAll(result.Body)
-			if err != nil {
-				if errors.Is(err, io.EOF) {
-					t.Log("Ожидаемая ошибка: unexpected end of JSON input")
-					return // или t.Skip("Ожидаемая ошибка")
-				}
-			}
-			//assert.NoError(t, err)
-			//require.NoError(t, err)
+			require.NoError(t, err)
 			err = result.Body.Close()
 			require.NoError(t, err)
 
