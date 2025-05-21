@@ -14,6 +14,7 @@ type User struct {
 	ID        string
 	FirstName string
 	LastName  string
+	age       int
 }
 
 // UserViewHandler - хэндлер, который нужно протестировать.
@@ -30,13 +31,19 @@ func UserViewHandler(users map[string]User) http.HandlerFunc {
 		}
 		user, ok := users[userId]
 		if !ok {
+			errJson := jsonRespError{errorMsg: "User not found"}
+			msg, _ := json.Marshal(errJson)
 			rw.WriteHeader(http.StatusNotFound)
+			rw.Write(msg)
 			return
 		}
 
 		jsonUser, err := json.Marshal(user)
 		if err != nil {
+			errJson := jsonRespError{errorMsg: "No valid JSON object for user"}
+			msg, _ := json.Marshal(errJson)
 			rw.WriteHeader(http.StatusInternalServerError)
+			rw.Write(msg)
 			return
 		}
 		rw.WriteHeader(http.StatusOK)

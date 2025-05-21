@@ -24,7 +24,7 @@ func TestUserViewHandler(t *testing.T) {
 		want    want
 	}{
 		{
-			name: "simple test #1",
+			name: "test status 200 OK",
 			users: map[string]User{
 				"id1": {
 					ID:        "id1",
@@ -44,7 +44,22 @@ func TestUserViewHandler(t *testing.T) {
 			request: "/users?user_id=id1",
 		},
 		{
-			name: "simple test #2",
+			name: "test status 404 Not Found",
+			users: map[string]User{
+				"id1": {
+					ID:        "id1",
+					FirstName: "Misha",
+					LastName:  "Popov",
+				},
+			},
+			want: want{
+				contentType: "application/json",
+				statusCode:  http.StatusNotFound,
+			},
+			request: "/users?user_id=id3",
+		},
+		{
+			name: "test status 400 Bad Request",
 			users: map[string]User{
 				"id1": {
 					ID:        "id1",
@@ -55,6 +70,22 @@ func TestUserViewHandler(t *testing.T) {
 			want: want{
 				contentType: "application/json",
 				statusCode:  http.StatusBadRequest,
+			},
+			request: "/users",
+		},
+		{
+			name: "test status 500 Internal Server Error",
+			users: map[string]User{
+				"id1": {
+					ID:        "id1",
+					FirstName: "Misha",
+					LastName:  "Popov",
+					age:       12,
+				},
+			},
+			want: want{
+				contentType: "application/json",
+				statusCode:  http.StatusInternalServerError,
 			},
 			request: "/users",
 		},
