@@ -36,7 +36,7 @@ func TestAbs2(t *testing.T) {
 		value float64
 		want  float64
 	}{
-		{name: "negative value", value: -3.001, want: 3.002},
+		{name: "negative value", value: -3.001, want: 3.001},
 		{name: "small value", value: -0.0000001, want: 0.0000001},
 	}
 	for _, test := range tests {
