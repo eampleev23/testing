@@ -6,7 +6,7 @@ import (
 )
 
 type jsonRespError struct {
-	errorMsg string `json:"error"`
+	ErrorMsg string `json:"error"`
 }
 
 // User - основной объект для теста
@@ -14,7 +14,6 @@ type User struct {
 	ID        string
 	FirstName string
 	LastName  string
-	age       int
 }
 
 // UserViewHandler - хэндлер, который нужно протестировать.
@@ -23,7 +22,7 @@ func UserViewHandler(users map[string]User) http.HandlerFunc {
 		rw.Header().Set("content-type", "application/json")
 		userId := r.URL.Query().Get("user_id")
 		if userId == "" {
-			errJson := jsonRespError{errorMsg: "Bad request"}
+			errJson := jsonRespError{ErrorMsg: "Bad request"}
 			msg, _ := json.Marshal(errJson)
 			rw.WriteHeader(http.StatusBadRequest)
 			rw.Write(msg)
@@ -31,7 +30,7 @@ func UserViewHandler(users map[string]User) http.HandlerFunc {
 		}
 		user, ok := users[userId]
 		if !ok {
-			errJson := jsonRespError{errorMsg: "User not found"}
+			errJson := jsonRespError{ErrorMsg: "User not found"}
 			msg, _ := json.Marshal(errJson)
 			rw.WriteHeader(http.StatusNotFound)
 			rw.Write(msg)
@@ -40,7 +39,7 @@ func UserViewHandler(users map[string]User) http.HandlerFunc {
 
 		jsonUser, err := json.Marshal(user)
 		if err != nil {
-			errJson := jsonRespError{errorMsg: "No valid JSON object for user"}
+			errJson := jsonRespError{ErrorMsg: "No valid JSON object for user"}
 			msg, _ := json.Marshal(errJson)
 			rw.WriteHeader(http.StatusInternalServerError)
 			rw.Write(msg)

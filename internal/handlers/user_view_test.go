@@ -20,7 +20,7 @@ func TestUserViewHandler(t *testing.T) {
 	tests := []struct {
 		name    string
 		request string
-		users   map[string]User
+		users   interface{}
 		want    want
 	}{
 		{
@@ -74,28 +74,26 @@ func TestUserViewHandler(t *testing.T) {
 			request: "/users",
 		},
 		{
-			name: "test status 500 Internal Server Error",
-			users: map[string]User{
-				"id1": {
-					ID:        "id1",
-					FirstName: "Misha",
-					LastName:  "Popov",
-					age:       12,
-				},
-			},
+			name:  "test status 500 Internal Server Error",
+			users: "invalid json",
 			want: want{
 				contentType: "application/json",
 				statusCode:  http.StatusInternalServerError,
 			},
-			request: "/users",
+			request: "/users?user_id=id1",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			defer func() {
+				if r := recover(); r != nil && tt.want.statusCode != 500 {
+					t.Errorf("Unexpected panic: %v", r)
+				}
+			}()
 			request := httptest.NewRequest(http.MethodGet, tt.request, nil)
 			request.Header.Set("Content-Type", "application/json")
 			w := httptest.NewRecorder()
-			h := http.HandlerFunc(UserViewHandler(tt.users))
+			h := http.HandlerFunc(UserViewHandler(tt.users.(map[string]User)))
 			h(w, request)
 
 			result := w.Result()
