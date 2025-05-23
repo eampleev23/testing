@@ -14,6 +14,8 @@
 
 # Binaries
 cmd/server/server
+cmd/client/client
+cmd/rsa_oaep/rsa_oaep
 
 # Dependency directories (remove the comment below to include it)
 vendor/
