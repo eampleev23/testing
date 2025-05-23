@@ -14,7 +14,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("privateKey=", privateKey)
 	publickey := &privateKey.PublicKey
+	fmt.Println("publicKey=", publickey)
 
 	// Шифруем сообщение открытым ключом (OAEP)
 	message := []byte("секретное сообщение")
